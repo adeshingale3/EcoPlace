@@ -37,6 +37,7 @@ const Profile = () => {
           <p><strong>Name:</strong> {userData.name}</p>
           <p><strong>Email:</strong> {userData.email}</p>
           <p><strong>Joined:</strong> {new Date(userData.createdAt).toLocaleDateString()}</p>
+          <p><strong>Points:</strong> {userData.points || 0}</p>
         </div>
       </div>
     </div>

@@ -44,6 +44,7 @@ const Register = () => {
       await setDoc(doc(db, "users", user.uid), {
         name: formData.name,
         email: formData.email,
+        points: 0,
         createdAt: new Date().toISOString()
       });
 

@@ -1,4 +1,6 @@
 import React from "react";
+import { auth, db } from "../firebase";
+import { doc, updateDoc, increment } from "firebase/firestore";
 
 function ProductCard({ item }) {
   // Directly use the image or fallback to placeholder
@@ -85,8 +87,21 @@ function ProductCard({ item }) {
     }
   };
 
+  // Award points to the user for viewing a product with a high eco score
+  const awardPoints = async () => {
+    if (ecoScore > 10) {
+      const user = auth.currentUser;
+      if (user) {
+        const userRef = doc(db, "users", user.uid);
+        await updateDoc(userRef, {
+          points: increment(0.5),
+        });
+      }
+    }
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow p-4">
+    <div className="bg-white rounded-lg shadow p-4" onClick={awardPoints}>
       <img
         src={image}
         alt={item.title}
