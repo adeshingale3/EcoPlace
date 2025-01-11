@@ -13,52 +13,40 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
   };
 
   return (
-    <nav className="bg-white shadow-md">
+    <nav className="bg-green-600 shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <div className="flex">
+          <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center">
-              <span className="text-xl font-bold text-blue-600">Brand</span>
+              <span className="text-xl font-bold text-white">EcoPlace</span>
             </Link>
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              <Link
-                to="/"
-                className="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Home
-              </Link>
-              <Link
-                to="/explore"
-                className="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Explore Products
-              </Link>
+            <div className="hidden md:flex md:ml-6 space-x-4">
               <Link
                 to="/marketplace"
-                className="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                className="text-white px-3 py-2 rounded-md text-sm font-medium"
               >
                 Marketplace
               </Link>
               <Link
                 to="/wishlist"
-                className="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                className="text-white px-3 py-2 rounded-md text-sm font-medium"
               >
                 Wishlist
               </Link>
             </div>
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center space-x-4">
             {isAuthenticated ? (
               <>
                 <Link
                   to="/profile"
-                  className="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Profile
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="ml-4 bg-blue-500 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-600"
+                  className="text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Logout
                 </button>
@@ -67,13 +55,13 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
               <>
                 <Link
                   to="/login"
-                  className="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Login
                 </Link>
                 <Link
                   to="/register"
-                  className="ml-4 bg-blue-500 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-600"
+                  className="bg-white text-green-600 px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Sign Up
                 </Link>

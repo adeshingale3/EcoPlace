@@ -39,6 +39,10 @@ const Profile = () => {
           <p><strong>Joined:</strong> {new Date(userData.createdAt).toLocaleDateString()}</p>
           <p><strong>Points:</strong> {userData.points || 0}</p>
         </div>
+        <div className="mt-6">
+          <h2 className="text-xl font-semibold mb-2">Achievements</h2>
+          <p className="text-gray-700">You have earned {userData.points || 0} points for viewing eco-friendly products.</p>
+        </div>
       </div>
     </div>
   );

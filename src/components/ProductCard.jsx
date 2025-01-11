@@ -117,7 +117,7 @@ function ProductCard({ item }) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-4" onClick={awardPoints}>
+    <div className="bg-white rounded-lg shadow-lg p-4 transition-transform transform hover:scale-105" onClick={awardPoints}>
       <img
         src={image}
         alt={item.title}
