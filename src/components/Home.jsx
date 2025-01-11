@@ -11,42 +11,24 @@ function Home() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(false); // Toggle chatbot visibility
+  const [sortOrder, setSortOrder] = useState("desc");
 
-  const searchProducts = async () => {
-    if (!searchInput) {
-      alert("Please enter a search term");
-      return;
-    }
-
+  const handleSearch = async () => {
     setLoading(true);
     setErrorMessage("");
 
     try {
-      const url = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_API_KEY}&cx=${SEARCH_ENGINE_ID}&q=${encodeURIComponent(
-        searchInput
-      )}`;
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        throw new Error(
-          `Failed to fetch data from Google Custom Search API: ${response.status} ${response.statusText}`
-        );
-      }
-
+      const response = await fetch(
+        `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_API_KEY}&cx=${SEARCH_ENGINE_ID}&q=${searchInput}`
+      );
       const data = await response.json();
-      if (!data.items || data.items.length === 0) {
-        setResults([]);
-        setErrorMessage("No results found.");
-        return;
-      }
-
       const enrichedItems = data.items.map((item) => ({
         ...item,
         ecoScore: calculateEcoScore(item.title, item.snippet),
       }));
       setResults(enrichedItems);
     } catch (error) {
-      setErrorMessage(error.message || "An error occurred while fetching data.");
+      setErrorMessage("Failed to fetch search results.");
     } finally {
       setLoading(false);
     }
@@ -68,55 +50,51 @@ function Home() {
     return Math.min(score, 100);
   };
 
-  const sendMessageToChatbot = async (message) => {
-  try {
-    const response = await fetch('http://127.0.0.1:5000/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ message }),
-    });
-    const data = await response.json();
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
+  const sortedResults = [...results].sort((a, b) => {
+    const ecoScoreA = a.ecoScore || 0;
+    const ecoScoreB = b.ecoScore || 0;
+    return sortOrder === "desc" ? ecoScoreB - ecoScoreA : ecoScoreA - ecoScoreB;
+  });
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
-      <h1 className="text-3xl font-bold text-center mb-8">Product Search</h1>
-      <div className="flex justify-center mb-8">
-        <input
-          type="text"
-          className="w-1/2 px-4 py-2 border rounded-l-lg"
-          placeholder="Search for products..."
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-        />
-        <button
-          className="px-4 py-2 bg-blue-500 text-white rounded-r-lg"
-          onClick={searchProducts}
-        >
-          Search
-        </button>
-      </div>
-
-      {loading ? (
-        <p className="text-center">Loading...</p>
-      ) : errorMessage ? (
-        <p className="text-center text-red-500">{errorMessage}</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {results.map((item, index) => (
+    <div className="min-h-screen bg-gray-100 p-4">
+      <div className="max-w-2xl mx-auto">
+        <h1 className="text-3xl font-bold text-center mb-6">Search Products</h1>
+        <div className="flex mb-4">
+          <input
+            type="text"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="flex-grow border border-gray-300 rounded-l px-4 py-2"
+            placeholder="Search for products..."
+          />
+          <button
+            onClick={handleSearch}
+            className="bg-blue-500 text-white px-4 py-2 rounded-r"
+          >
+            Search
+          </button>
+        </div>
+        {loading && <p>Loading...</p>}
+        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+        <div className="flex justify-end mb-4">
+          <label className="mr-2">Sort by Eco Score:</label>
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="border border-gray-300 rounded px-2 py-1"
+          >
+            <option value="desc">Highest to Lowest</option>
+            <option value="asc">Lowest to Highest</option>
+          </select>
+        </div>
+        <div className="grid grid-cols-1 gap-4">
+          {sortedResults.map((item, index) => (
             <ProductCard key={index} item={item} />
           ))}
         </div>
-      )}
+      </div>
 
-      {/* Circular Button */}
       <button
         className="fixed bottom-6 right-6 bg-blue-500 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg"
         onClick={() => setIsChatOpen(!isChatOpen)}

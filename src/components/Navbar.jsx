@@ -33,6 +33,18 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
               >
                 Explore Products
               </Link>
+              <Link
+                to="/marketplace"
+                className="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Marketplace
+              </Link>
+              <Link
+                to="/wishlist"
+                className="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Wishlist
+              </Link>
             </div>
           </div>
           <div className="flex items-center">

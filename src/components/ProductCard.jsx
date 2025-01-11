@@ -1,6 +1,6 @@
 import React from "react";
 import { auth, db } from "../firebase";
-import { doc, updateDoc, increment } from "firebase/firestore";
+import { doc, updateDoc, increment, arrayUnion } from "firebase/firestore";
 
 function ProductCard({ item }) {
   // Directly use the image or fallback to placeholder
@@ -100,6 +100,22 @@ function ProductCard({ item }) {
     }
   };
 
+  // Add product to wishlist
+  const addToWishlist = async () => {
+    const user = auth.currentUser;
+    if (user) {
+      const userRef = doc(db, "users", user.uid);
+      await updateDoc(userRef, {
+        wishlist: arrayUnion({
+          title: item.title,
+          link: item.link,
+          image: image,
+          ecoScore: ecoScore,
+        }),
+      });
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg shadow p-4" onClick={awardPoints}>
       <img
@@ -120,6 +136,12 @@ function ProductCard({ item }) {
       >
         View Product
       </a>
+      <button
+        onClick={addToWishlist}
+        className="mt-2 bg-blue-500 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-600"
+      >
+        Add to Wishlist
+      </button>
     </div>
   );
 }
