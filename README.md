@@ -4,7 +4,7 @@ EcoScore: AI-Powered Sustainable Shopping Platform
 
 Online shoppers lack easy access to environmental impact information when making purchase decisions, making it difficult to make eco-conscious choices. Consumers and businesses are increasingly aware of the importance of sustainability, but they often lack the tools to make informed eco-friendly purchasing decisions. The environmental impact of products is not always transparent, making it difficult to choose sustainable options.
 
-## Solution
+## Solution (Link - https://eco-place-cyan.vercel.app/)
 
 EcoScore is a platform that provides real-time sustainability scores for e-commerce products, empowering consumers and businesses to make eco-friendly decisions. Our AI-powered system evaluates products based on various environmental factors and presents an easy-to-understand score.
 
