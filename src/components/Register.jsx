@@ -60,8 +60,8 @@ const Register = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-2xl">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Join VConnect</h1>
-          <p className="mt-2 text-gray-600">Start your volunteering journey today</p>
+          <h1 className="text-3xl font-bold text-gray-900">Join EcoPlace</h1>
+          <p className="mt-2 text-gray-600">Shop Smart, Score Green, Save Earth</p>
         </div>
 
         {error && (

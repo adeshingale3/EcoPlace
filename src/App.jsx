@@ -8,13 +8,19 @@ import Register from "./components/Register";
 import Profile from "./components/Profile";
 import Marketplace from "./components/Marketplace";
 import Wishlist from "./components/Wishlist";
+import Leaderboard from "./components/Leaderboard";
+import Loader from "./components/Loader";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setIsAuthenticated(!!user);
+      setTimeout(() => {
+        setLoading(false);
+      }, 3000);
     });
 
     return () => unsubscribe();
@@ -23,6 +29,10 @@ const App = () => {
   const handleLogout = () => {
     setIsAuthenticated(false);
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <Router>
@@ -35,6 +45,7 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
         </Routes>
       </div>
     </Router>
