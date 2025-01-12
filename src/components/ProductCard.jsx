@@ -13,7 +13,6 @@ const ProductCard = ({ item }) => {
   useEffect(() => {
     const fetchPrice = async () => {
       try {
-        // Replace this with your actual price API
         const response = await fetch(`https://api.yourpriceapi.com/products?url=${encodeURIComponent(item.link)}`);
         const data = await response.json();
         setPrice(data.price);
@@ -21,9 +20,9 @@ const ProductCard = ({ item }) => {
         console.error("Error fetching price:", error);
         // Set a mock price for demonstration
         setPrice({
-          current: Math.floor(Math.random() * 100) + 20,
+          current: Math.floor(Math.random() * 10) + 20,
           currency: "USD",
-          saved: Math.floor(Math.random() * 20)
+          saved: Math.floor(Math.random() * 20),
         });
       } finally {
         setLoading(false);
@@ -35,22 +34,29 @@ const ProductCard = ({ item }) => {
 
   const image = item.pagemap?.cse_image?.[0]?.src || "/placeholder-image.jpg";
 
-  const calculateEcoScore = () => {
-    const ecoAttributes = {
-      materials: ["bamboo", "hemp", "organic cotton", "recycled plastic"],
-      recyclability: ["recyclable", "recycled"],
-      biodegradability: ["biodegradable", "compostable"],
-    };
+  // Expanded ecoAttributes
+  const ecoAttributes = {
+    materials: [
+      "bamboo", "hemp", "organic cotton", "recycled plastic", "organic wool", "recycled cotton", "silk", "linen"
+    ],
+    recyclability: ["recyclable", "recycled", "upcycled"],
+    biodegradability: ["biodegradable", "compostable", "eco-friendly", "natural fibers"],
+    packaging: ["recyclable packaging", "compostable packaging", "minimal packaging", "plastic-free packaging"],
+  };
 
+  // Calculate eco score based on attributes in title or description
+  const calculateEcoScore = () => {
     let score = 0;
     Object.values(ecoAttributes).forEach((attributes) => {
       attributes.forEach((attribute) => {
-        if (item.title.toLowerCase().includes(attribute) || item.snippet.toLowerCase().includes(attribute)) {
+        if (
+          item.title.toLowerCase().includes(attribute) || item.snippet.toLowerCase().includes(attribute)
+        ) {
           score += 20;
         }
       });
     });
-    return Math.min(score, 100);
+    return Math.min(score, 100);  // Ensure the score doesn't exceed 100
   };
 
   const ecoScore = calculateEcoScore();
@@ -65,12 +71,6 @@ const ProductCard = ({ item }) => {
 
   const getEcoScoreExplanation = () => {
     const reasons = [];
-    const ecoAttributes = {
-      materials: ["bamboo", "hemp", "organic cotton", "recycled plastic"],
-      recyclability: ["recyclable", "recycled"],
-      biodegradability: ["biodegradable", "compostable"],
-    };
-
     Object.entries(ecoAttributes).forEach(([key, attributes]) => {
       attributes.forEach((attribute) => {
         if (item.title.toLowerCase().includes(attribute) || item.snippet.toLowerCase().includes(attribute)) {
@@ -83,7 +83,7 @@ const ProductCard = ({ item }) => {
   };
 
   const awardPoints = async () => {
-    if (ecoScore > 20) {
+    if (ecoScore >= 20) {
       const user = auth.currentUser;
       if (user) {
         const userRef = doc(db, "users", user.uid);
@@ -93,6 +93,7 @@ const ProductCard = ({ item }) => {
       }
     }
   };
+  
 
   const addToWishlist = async (e) => {
     e.stopPropagation();

@@ -4,7 +4,7 @@ import ChatBot from "./ChatBot";
 import { FaSearch, FaArrowUp, FaArrowDown, FaLeaf } from "react-icons/fa";
 
 const SEARCH_ENGINE_ID = "35d10efcfcaf140fb";
-const GOOGLE_API_KEY = "AIzaSyCb4aZAisLfy4fFvC6vIpr8bxpSAkKPkCs";
+const GOOGLE_API_KEY = "AIzaSyBji7yC58aKj_SlzHTIB-KTZCmFlXTv-WM";
 
 function Home() {
   const [searchInput, setSearchInput] = useState("");

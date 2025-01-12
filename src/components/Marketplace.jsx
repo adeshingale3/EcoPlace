@@ -12,7 +12,7 @@ const Marketplace = () => {
       name: "Eco-friendly Water Bottle",
       description: "A reusable water bottle made from sustainable materials.",
       points: 50,
-      image: "/products/water-bottle.jpg",
+      image: "image here", // Replace image with text
       impact: "Saves 1,460 plastic bottles per year"
     },
     {
@@ -20,10 +20,17 @@ const Marketplace = () => {
       name: "Reusable Shopping Bag",
       description: "A durable shopping bag made from recycled materials.",
       points: 30,
-      image: "/products/shopping-bag.jpg",
+      image: "image here", // Replace image with text
       impact: "Prevents 170 plastic bags from landfills"
     },
-    // Add more products as needed
+    {
+      id: 3, // New product added
+      name: "Compostable Phone Case",
+      description: "A phone case made from compostable materials, reducing plastic waste.",
+      points: 60,
+      image: "image here", // Replace image with text
+      impact: "Reduces 50 plastic phone cases per year"
+    },
   ]);
   const [redeemedProducts, setRedeemedProducts] = useState([]);
 
@@ -70,7 +77,7 @@ const Marketplace = () => {
   }
 
   return (
-    <div className=" min-h-screen bg-gradient-to-b from-green-50 via-green-100 to-green-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-green-50 via-green-100 to-green-50 py-12 px-4">
       <div className="mt-20 max-w-7xl mx-auto mb-16">
         <div className="text-center relative">
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -112,11 +119,9 @@ const Marketplace = () => {
               className="group bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
             >
               <div className="relative h-64">
-                <img
-                  src={product.image || "placeholder.jpg"}
-                  alt={product.name}
-                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                />
+                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                  <span className="text-xl font-bold text-gray-500">{product.image}</span> {/* Display "image here" */}
+                </div>
                 <div className="absolute top-4 right-4">
                   <div className="bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg flex items-center">
                     <FaLeaf className="text-green-500 mr-2" />
@@ -178,7 +183,7 @@ const Marketplace = () => {
 
       <div className="max-w-7xl mx-auto mt-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
+          {[  
             {
               icon: FaInfoCircle,
               title: "How It Works",

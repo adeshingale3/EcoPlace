@@ -1,12 +1,10 @@
-
-
-
-
 import React, { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { updatePassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { FaUser, FaEnvelope, FaCalendar, FaStar, FaTrophy, FaEdit, FaSave, FaMedal, FaLeaf } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaCalendar, FaStar, FaTrophy, FaEdit, FaSave, FaLeaf } from "react-icons/fa";
+import { reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
@@ -16,7 +14,6 @@ const Profile = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  // ... keep existing useEffect and functions ...
   useEffect(() => {
     const fetchUserData = async () => {
       const user = auth.currentUser;
@@ -32,7 +29,73 @@ const Profile = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, []); 
+
+  // Update the user's points when there's a change
+  useEffect(() => {
+    const fetchUserPoints = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists()) {
+          const data = userDoc.data();
+          setUserData((prevData) => ({
+            ...prevData,
+            points: data.points,
+          }));
+        }
+      }
+    };
+
+    fetchUserPoints();
+  }, [userData?.points]); // Depend on points so it re-fetches when updated
+
+  const handleSave = async () => {
+    if (!auth.currentUser) {
+      alert("User is not logged in.");
+      return;
+    }
+
+    try {
+      const userRef = doc(db, "users", auth.currentUser.uid);
+
+      // Update name in Firestore
+      const updatedData = { name };
+
+      // Handle password update if a new password is provided
+      if (password) {
+        const user = auth.currentUser;
+
+        // Re-authenticate the user before updating the password
+        const credential = EmailAuthProvider.credential(
+          user.email,
+          prompt("Please enter your current password to re-authenticate:")
+        );
+
+        await reauthenticateWithCredential(user, credential);
+        await updatePassword(user, password);
+        console.log("Password updated successfully");
+      }
+
+      await updateDoc(userRef, updatedData);
+
+      // Update local state
+      setUserData((prev) => ({
+        ...prev,
+        ...updatedData,
+      }));
+
+      setEditMode(false); // Exit edit mode
+      alert("Profile updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile: ", error);
+      alert(
+        error.code === "auth/requires-recent-login"
+          ? "Please log in again to update your password."
+          : "Failed to update profile. Please try again."
+      );
+    }
+  };
 
   if (loading) {
     return (
@@ -65,7 +128,6 @@ const Profile = () => {
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-green-100 py-28 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          {/* Header Section */}
           <div className="bg-gradient-to-r from-green-600 to-green-400 p-8 text-white">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
@@ -91,7 +153,6 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* Content Section */}
           <div className="p-8">
             {editMode ? (
               <div className="space-y-6">
@@ -123,7 +184,6 @@ const Profile = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* User Info */}
                 <div className="space-y-6">
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <div className="flex items-center space-x-3 text-gray-600">
@@ -134,17 +194,17 @@ const Profile = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <div className="flex items-center space-x-3 text-gray-600">
                       <FaCalendar className="text-green-600" />
                       <div>
                         <p className="text-sm">Member Since</p>
                         <p className="font-medium">
-                          {new Date(userData.createdAt).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
+                          {new Date(userData.createdAt).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
                           })}
                         </p>
                       </div>
@@ -157,12 +217,12 @@ const Profile = () => {
                       <div>
                         <p className="text-sm">Total Points</p>
                         <p className="font-medium">{userData.points || 0} points</p>
+                        <p className="text-sm text-gray-500">You can use these points to redeem any product in marketplace</p>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Achievements Section */}
                 <div className="space-y-6">
                   <div className="bg-gray-50 p-6 rounded-lg">
                     <h2 className="text-xl font-semibold mb-4 flex items-center">
@@ -181,10 +241,9 @@ const Profile = () => {
                         ></div>
                       </div>
                     </div>
-                    
-                    </div>
                   </div>
                 </div>
+              </div>
             )}
           </div>
         </div>
