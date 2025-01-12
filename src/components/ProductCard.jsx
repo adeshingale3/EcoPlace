@@ -83,7 +83,7 @@ const ProductCard = ({ item }) => {
   };
 
   const awardPoints = async () => {
-    if (ecoScore > 10) {
+    if (ecoScore > 20) {
       const user = auth.currentUser;
       if (user) {
         const userRef = doc(db, "users", user.uid);
@@ -189,6 +189,7 @@ const ProductCard = ({ item }) => {
             href={item.link}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={awardPoints}
             className="flex-1 bg-green-600 text-white py-2 px-4 rounded-full text-center font-medium hover:bg-green-700 transition-colors duration-300"
           >
             View Product
