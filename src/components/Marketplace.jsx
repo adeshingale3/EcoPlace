@@ -27,7 +27,7 @@ const Marketplace = () => {
       id: 3, // New product added
       name: "Compostable Phone Case",
       description: "A phone case made from compostable materials, reducing plastic waste.",
-      points: 60,
+      points: 2,
       image: "image here", // Replace image with text
       impact: "Reduces 50 plastic phone cases per year"
     },
